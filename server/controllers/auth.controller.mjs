@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs"
 import userData from "../models/userData.mjs";
-import OTP from "../models/OTP.mjs";
+import OTP from "../models/otp.mjs";
 import {sendOtp} from "../utils/sendOtp.mjs";
 import jwt from "jsonwebtoken"
 export const signup=async (req,res)=>{
