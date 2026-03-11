@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 # HostelPulse 🏨
 
 HostelPulse is a hostel issue management platform designed to streamline communication between hostel residents and administrators. The system allows students to report hostel-related issues easily, while administrators can manage and resolve complaints efficiently.
