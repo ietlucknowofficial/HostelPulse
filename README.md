@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 # HostelPulse 🏨
 
 HostelPulse is a hostel issue management platform designed to streamline communication between hostel residents and administrators. The system allows students to report hostel-related issues easily, while administrators can manage and resolve complaints efficiently.
@@ -48,9 +48,7 @@ This system improves communication and accountability between students and hoste
 
 ### Frontend
 - React.js
-- HTML
-- CSS
-- JavaScript
+- TailwindCSS
 
 ### Backend
 - Node.js
@@ -68,7 +66,6 @@ This system improves communication and accountability between students and hoste
 
 ## 🚀 Future Improvements
 
-- Image upload with complaints
 - Push notifications for updates
 - Admin analytics dashboard
 - Complaint priority system
@@ -77,7 +74,7 @@ This system improves communication and accountability between students and hoste
 
 ## 👥 Contributors
 
-- Abhinav Singh(2400520100004)
+- Abhinav Singh (2400520100004)
 
 ---
 
