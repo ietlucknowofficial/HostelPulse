@@ -13,7 +13,16 @@ export const completeProfile =async(req,res)=>{
     })
     }
     const user=req.user;
-    const emailRoll = user.email.match(/\d+/)[0];
+    const match = user.email.match(/\d+/);
+
+    if(!match){
+        return res.status(400).json({
+        success:false,
+        message:"Invalid email format"
+    })
+   }
+
+const emailRoll = match[0];
     if(rollNo!==emailRoll){
         return res.status(400).json({
             success:false,
