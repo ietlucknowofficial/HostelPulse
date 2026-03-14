@@ -75,7 +75,8 @@ This system improves communication and accountability between students and hoste
 ## 👥 Contributors
 
 - Abhinav Singh (2400520100004)
-- Himanshu (240050100040)
+- Himanshu (2400520100040)
+- Devraj Gupta (2400520100034)
 ---
 
 
