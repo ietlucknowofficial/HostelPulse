@@ -6,6 +6,5 @@ import { roleMiddleware } from '../middleware/role.middleware.mjs';
 import { createComplaint } from '../controllers/complaint.controller.mjs';
 const router=express.Router()
 
-
-router.post('/create-complaint',authMiddleware,roleMiddleware("Student"),createComplaint)
+router.post('/complete-profile',authMiddleware,roleMiddleware("Student"),completeProfile)
 export default router
