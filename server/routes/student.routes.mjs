@@ -7,4 +7,5 @@ import { createComplaint } from '../controllers/complaint.controller.mjs';
 const router=express.Router()
 
 router.post('/complete-profile',authMiddleware,roleMiddleware("Student"),completeProfile)
+router.post('/create-complaint',authMiddleware,roleMiddleware("Student"),createComplaint)
 export default router
