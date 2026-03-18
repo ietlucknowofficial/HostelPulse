@@ -5,6 +5,7 @@ const updateSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User"
@@ -32,10 +33,16 @@ const complaintSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  hostelId:{
+    type: mongoose.Schema.Types.ObjectId,
+    ref:"Hostel",
+    required:true
+  },
 
   photos: [
     {
-      type: String
+      type: String,
+
     }
   ],
 
@@ -45,7 +52,8 @@ const complaintSchema = new mongoose.Schema({
   },
 
   category: {
-    type: String,
+    type:String,
+    enum: ["hostel", "mess", "academic", "maintenance", "other"],
     required: true
   },
 
@@ -80,5 +88,8 @@ const complaintSchema = new mongoose.Schema({
   }
 
 });
+complaintSchema.index({ hostelId: 1 });
+complaintSchema.index({ status: 1 });
+complaintSchema.index({ category: 1 });
 
 export default mongoose.model("Complaint", complaintSchema);

@@ -5,7 +5,11 @@ const studentSchema=new mongoose.Schema({
     rollNo:{type:Number,required:true,unique:true},
     branch:{type:String,enum:["CSE-R","CSE-SF","CSE-AI","ECE","EE","ME","CHE","CE","MCA","MBA"],required:true},
     roomNo:{type:String,required:true},
-    hostelName:{type:String,required:true},
+   hostelId: {
+  type: mongoose.Schema.Types.ObjectId,
+  ref: "Hostel",
+  required: true
+},
     admissionYear:{type:Number,required:true},
 
 

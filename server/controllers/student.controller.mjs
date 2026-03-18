@@ -1,3 +1,4 @@
+import Hostel from "../models/hostel.mjs";
 import studentProfile from "../models/studentProfile.mjs";
 import userData from "../models/userData.mjs";
 
@@ -12,6 +13,14 @@ export const completeProfile =async(req,res)=>{
 
     })
     }
+    const hostel=await Hostel.findOne({name:hostelName})
+    if(!hostel){
+        return res.status(404).json({
+            success:false,
+            message:"Invalid Hostel Name"
+        })
+    }
+
     const user=req.user;
     const match = user.email.match(/\d+/);
 
@@ -23,7 +32,7 @@ export const completeProfile =async(req,res)=>{
    }
 
 const emailRoll = match[0];
-    if(rollNo!==emailRoll){
+    if(String(rollNo) !== emailRoll){
         return res.status(400).json({
             success:false,
             message:"Email and roll no doesn't belong to one student"
@@ -44,7 +53,7 @@ const emailRoll = match[0];
         rollNo,
         branch,
         roomNo,
-        hostelName,
+        hostelId:hostel._id,
         admissionYear
     })
     return res.status(201).json({
