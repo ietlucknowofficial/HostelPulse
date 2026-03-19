@@ -2,6 +2,7 @@
 import complaints from "../models/complaints.mjs";
 import studentProfile from "../models/studentProfile.mjs";
 
+
 export const createComplaint=async(req,res)=>{
 
     try {
@@ -41,6 +42,7 @@ export const createComplaint=async(req,res)=>{
 
         
     }
+}
 
     export const viewComplaints=async(req,res)=>{
     try {
@@ -124,9 +126,10 @@ catch(error){
     )
 
 }
-
-
 }
+
+
+
 
 export const complaintStatus=async(req,res)=>{
     try{
@@ -269,4 +272,4 @@ export const deleteStudentComplaints=async(req,res)=>{
 
     
 
-}
+

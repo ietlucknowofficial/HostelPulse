@@ -7,6 +7,12 @@ export const signup=async (req,res)=>{
     try{
         
         const {name,email,password,confirmPassword,role}=req.body
+        if (role === "admin") {
+            return res.status(403).json({
+                success: false,
+                message: "Admin registration is not allowed"
+            })
+        }
          console.log("STEP 2: body parsed");
         const normalizedEmail=email.toLowerCase().trim()
         console.log("STEP 3: email normalized");
