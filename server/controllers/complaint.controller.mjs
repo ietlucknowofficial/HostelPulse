@@ -268,6 +268,65 @@ export const deleteStudentComplaints=async(req,res)=>{
     }
 }
 
+export const reopenStudentComplaints=async(req,res)=>{
+    try {
+         const {id}=req.params;
+         const complaint=await complaints.findById(id);
+         if(!complaint){
+            return res.status(404).json({
+                success:false,
+                message:"Complaint not found"
+
+            })
+         }
+          if(complaint.userId.toString()!==req.user._id.toString()){
+            return res.status(403).json({
+                success:false,
+                message:"You can only modify your own complaints"
+            })
+        }
+        if(complaint.status!=='resolved'){
+            return res.status(400).json({
+                success:false,
+                message: "Only resolved complaints can be reopened"
+            })
+        }
+
+        complaint.status = 'pending'
+        complaint.reopenCount += 1
+        complaint.reopenAt = Date.now()
+        complaint.adminRemarks = null
+        complaint.resolvedAt = null
+
+        complaint.updates.push({
+            message: reason || "Complaint reopened by student",
+            userId: req.user._id
+        })
+
+        await complaint.save()
+
+        return res.status(200).json({
+            success: true,
+            message: "Complaint reopened successfully",
+            complaint
+        })
+
+        
+    } catch (error) {
+        return res.status(500).json({
+            success:false,
+            message:"Internal Server Error",
+            error:error.message
+        })
+        
+    }
+   
+    
+
+}
+
+
+
     
 
     
