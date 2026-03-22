@@ -271,6 +271,7 @@ export const deleteStudentComplaints=async(req,res)=>{
 export const reopenStudentComplaints=async(req,res)=>{
     try {
          const {id}=req.params;
+         const { reason } = req.body;
          const complaint=await complaints.findById(id);
          if(!complaint){
             return res.status(404).json({
