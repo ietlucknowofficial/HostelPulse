@@ -4,7 +4,7 @@ import Footer from './Footer'
 
 export default function Layout() {
   const { pathname } = useLocation()
-  const hideNav = ['/login', '/register'].includes(pathname)
+  const hideNav = ['/login', '/register','/verify-email','/complete-profile'].includes(pathname)
 
   return (
     <div>

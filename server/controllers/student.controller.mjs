@@ -56,6 +56,7 @@ const emailRoll = match[0];
         hostelId:hostel._id,
         admissionYear
     })
+    
     return res.status(201).json({
         success:true,
         message:"Profile completed sucessfully",
