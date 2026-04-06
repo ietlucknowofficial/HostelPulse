@@ -192,10 +192,10 @@ export default function Register() {
             <motion.div variants={fadeUp}>
               <label className="block text-[14px] font-medium text-[#1a1a22] mb-1.5">Role</label>
               <div className="grid grid-cols-2 gap-3">
-                {['student', 'admin'].map(role => (
+                {['student'].map(role => (
                   <button key={role} type="button" onClick={() => setForm(prev => ({ ...prev, role }))}
                     className={`h-[48px] rounded-xl border text-[15px] font-medium transition-all ${form.role === role ? 'bg-[#534AB7] border-[#534AB7] text-white shadow-md shadow-purple-200' : 'bg-[#f9f9fb] border-black/[0.1] text-[#6a6a82] hover:border-[#534AB7]/40 hover:text-[#534AB7]'}`}>
-                    {role === 'student' ? '🎓 Student' : '🛡️ Admin'}
+                    {role === 'student' ? '🎓 Student':null}
                   </button>
                 ))}
               </div>
