@@ -41,6 +41,9 @@ const emailRoll = match[0];
     }
         
     const existingUser=await studentProfile.findOne({userId:user._id})
+    
+    
+
     if(existingUser){
         return res.status(400).json({
             success:false,
@@ -56,6 +59,11 @@ const emailRoll = match[0];
         hostelId:hostel._id,
         admissionYear
     })
+    const userInfo = await userData.findById(user._id);
+    userInfo.status="Active";
+    await userInfo.save();
+
+
     
     return res.status(201).json({
         success:true,
