@@ -194,6 +194,12 @@ export default function CompleteProfile() {
     setServerError("");
     try {
       await API.post("/student/complete-profile", form);
+       const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      const user = JSON.parse(storedUser);
+      user.status = "Active";
+      localStorage.setItem("user", JSON.stringify(user));
+    }
       setSavedProfile({ ...form });
       setSubmitted(true);
     } catch (err) {
