@@ -46,7 +46,12 @@ export default function Login() {
       })
       localStorage.setItem('token', data.token)
       localStorage.setItem('user',  JSON.stringify(data.user))
-      navigate('/')
+      if (data.user.status !== "Active") {
+  navigate('/complete-profile');
+} else {
+  navigate('/');
+}
+     
     } catch (err) {
       const status = err.response?.status
       if (status === 401) {
