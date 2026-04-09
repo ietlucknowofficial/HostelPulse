@@ -109,7 +109,7 @@ export const loginUser = async (req, res) => {
             id:userRecord._id,
             email:userRecord.email,
             role:userRecord.role,
-            status: userRecord.status
+           
         },  
            process.env.JWT_SECRET,
            {expiresIn:"12hr"}
@@ -117,7 +117,7 @@ export const loginUser = async (req, res) => {
 
         res.status(200).json({ message: "Login successful",
             token,
-            user: { name: userRecord.name, email: userRecord.email, role: userRecord.role } });
+            user: { name: userRecord.name, email: userRecord.email, role: userRecord.role, status: userRecord.status } });
     } catch (error) {
         console.error("Login error:", error);
         res.status(500).json({ message: "Server error" });
