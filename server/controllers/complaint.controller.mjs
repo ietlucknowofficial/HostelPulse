@@ -260,7 +260,7 @@ export const reopenStudentComplaints=async(req,res)=>{
                 message:"You can only modify your own complaints"
             })
         }
-        if(complaint.status!=='resolved'||complaint.status!=='rejected'){
+        if(complaint.status!=='resolved'&&complaint.status!=='rejected'){
             return res.status(400).json({
                 success:false,
                 message: "Only resolved or rejected complaints can be reopened"
