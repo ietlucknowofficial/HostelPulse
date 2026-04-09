@@ -3,15 +3,20 @@ import { Navigate, useLocation } from 'react-router-dom'
 export default function ProtectedRoute({ children }) {
   const location = useLocation()
 
-  
-  const data = localStorage.getItem('token')
+  const stored = localStorage.getItem('user')
 
+  let user = null
+  try {
+    user = stored ? JSON.parse(stored) : null
+  } catch {
+    user = null
+  }
 
-  if (data.role!=='student') {
+  if (!user || user.role !== 'student') {
     return (
       <Navigate
         to="/"
-        state={{ from: location }}   
+        state={{ from: location }}
         replace
       />
     )

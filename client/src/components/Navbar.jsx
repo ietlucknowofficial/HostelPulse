@@ -1,24 +1,60 @@
 import { useState, useEffect } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-
-const navLinks = [
-  { label: 'Home',              to: '/' },
-  { label: 'Raise a complaint', to: '/create-complaint' },
-  { label: 'My complaints',     to: '/my-complaints' },
-  { label: 'View all',          to: '/complaints' },
-]
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [user, setUser] = useState(null)
   const { pathname } = useLocation()
+  const navigate = useNavigate()
+
+  const getNavLinks = (role) => {
+    const base = [{ label: 'Home', to: '/' }]
+    if (role === 'admin') {
+      return [
+        ...base,
+        { label: 'Resolve complaints', to: '/view-complaints' },
+        { label: 'All Complaints',      to: '/view-complaints' },
+      ]
+    }
+    return [
+      ...base,
+      { label: 'Raise a complaint', to: '/create-complaint' },
+      { label: 'All Complaints',     to: '/view-complaints' },
+    ]
+  }
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12)
     window.addEventListener('scroll', onScroll)
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
+
+  useEffect(() => {
+    const readUser = () => {
+      const token = localStorage.getItem('token')
+      const stored = localStorage.getItem('user')
+      if (token && stored) {
+        try { setUser(JSON.parse(stored)) } catch { setUser(null) }
+      } else {
+        setUser(null)
+      }
+    }
+    readUser()
+    window.addEventListener('storage', readUser)
+    return () => window.removeEventListener('storage', readUser)
+  }, [])
+
+  const handleLogout = () => {
+    localStorage.removeItem('token')
+    localStorage.removeItem('user')
+    window.dispatchEvent(new Event('userChanged'))
+    setUser(null)
+    navigate('/')
+  }
+
+  const navLinks = getNavLinks(user?.role)
 
   return (
     <>
@@ -72,22 +108,51 @@ export default function Navbar() {
 
         {/* Auth Buttons */}
         <div className="hidden md:flex items-center gap-2.5">
-          <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-            <Link
-              to="/login"
-              className="text-[15px] text-[#5a5a72] px-4 py-2 rounded-lg border border-black/[0.12] hover:bg-black/[0.04] hover:text-[#1a1a22] transition-colors duration-200"
-            >
-              Log in
-            </Link>
-          </motion.div>
-          <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-            <Link
-              to="/register"
-              className="text-[15px] text-white font-medium px-4 py-2 rounded-lg bg-[#534AB7] hover:bg-[#6259c9] transition-colors duration-200 shadow-md shadow-purple-200"
-            >
-              Sign up
-            </Link>
-          </motion.div>
+          {user ? (
+            <>
+              <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+                <Link
+                  to="/dashboard"
+                  title="Dashboard"
+                  className="flex items-center justify-center w-9 h-9 rounded-lg border border-black/[0.12] hover:bg-black/[0.04] text-[#5a5a72] hover:text-[#1a1a22] transition-colors duration-200"
+                >
+                  <svg width="17" height="17" viewBox="0 0 16 16" fill="none">
+                    <rect x="1" y="1" width="6" height="6" rx="1.5" stroke="currentColor" strokeWidth="1.4"/>
+                    <rect x="9" y="1" width="6" height="6" rx="1.5" stroke="currentColor" strokeWidth="1.4"/>
+                    <rect x="1" y="9" width="6" height="6" rx="1.5" stroke="currentColor" strokeWidth="1.4"/>
+                    <rect x="9" y="9" width="6" height="6" rx="1.5" stroke="currentColor" strokeWidth="1.4"/>
+                  </svg>
+                </Link>
+              </motion.div>
+              <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+                <button
+                  onClick={handleLogout}
+                  className="text-[15px] text-[#5a5a72] px-4 py-2 rounded-lg border border-black/[0.12] hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition-colors duration-200"
+                >
+                  Log out
+                </button>
+              </motion.div>
+            </>
+          ) : (
+            <>
+              <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+                <Link
+                  to="/login"
+                  className="text-[15px] text-[#5a5a72] px-4 py-2 rounded-lg border border-black/[0.12] hover:bg-black/[0.04] hover:text-[#1a1a22] transition-colors duration-200"
+                >
+                  Log in
+                </Link>
+              </motion.div>
+              <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+                <Link
+                  to="/register"
+                  className="text-[15px] text-white font-medium px-4 py-2 rounded-lg bg-[#534AB7] hover:bg-[#6259c9] transition-colors duration-200 shadow-md shadow-purple-200"
+                >
+                  Sign up
+                </Link>
+              </motion.div>
+            </>
+          )}
         </div>
 
         {/* Mobile Hamburger */}
@@ -122,8 +187,28 @@ export default function Navbar() {
               </Link>
             ))}
             <div className="flex gap-2 mt-2 pt-3 border-t border-black/[0.06]">
-              <Link to="/login" onClick={() => setMenuOpen(false)} className="flex-1 text-center text-[15px] text-[#5a5a72] py-2.5 rounded-lg border border-black/[0.12]">Log in</Link>
-              <Link to="/register" onClick={() => setMenuOpen(false)} className="flex-1 text-center text-[15px] text-white font-medium py-2.5 rounded-lg bg-[#534AB7]">Sign up</Link>
+              {user ? (
+                <>
+                  <Link
+                    to="/dashboard"
+                    onClick={() => setMenuOpen(false)}
+                    className="flex-1 text-center text-[15px] text-[#5a5a72] py-2.5 rounded-lg border border-black/[0.12]"
+                  >
+                    Dashboard
+                  </Link>
+                  <button
+                    onClick={() => { setMenuOpen(false); handleLogout() }}
+                    className="flex-1 text-center text-[15px] text-red-600 py-2.5 rounded-lg border border-red-200 bg-red-50"
+                  >
+                    Log out
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link to="/login" onClick={() => setMenuOpen(false)} className="flex-1 text-center text-[15px] text-[#5a5a72] py-2.5 rounded-lg border border-black/[0.12]">Log in</Link>
+                  <Link to="/register" onClick={() => setMenuOpen(false)} className="flex-1 text-center text-[15px] text-white font-medium py-2.5 rounded-lg bg-[#534AB7]">Sign up</Link>
+                </>
+              )}
             </div>
           </motion.div>
         )}

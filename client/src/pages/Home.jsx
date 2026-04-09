@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, useInView } from 'framer-motion'
 
@@ -110,13 +110,27 @@ function SectionWrapper({ children }) {
 }
 
 export default function Home() {
+  const [user, setUser] = useState(null)
+
+  useEffect(() => {
+    const readUser = () => {
+      const stored = localStorage.getItem('user')
+      try { setUser(stored ? JSON.parse(stored) : null) } catch { setUser(null) }
+    }
+    readUser()
+    window.addEventListener('storage', readUser)
+     window.addEventListener('userChanged', readUser)
+    return () => {
+      window.removeEventListener('storage', readUser),
+    window.removeEventListener('userChanged', readUser)}
+  }, [])
+
   return (
     <div className="bg-white pt-[68px]">
 
       {/* ── HERO ─────────────────────────────────────────── */}
       <section className="min-h-[calc(100vh-68px)] flex items-center justify-center text-center px-6 py-24 relative overflow-hidden bg-white">
 
-        {/* Animated orbs */}
         <motion.div
           animate={{ x: [0, 40, -20, 0], y: [0, -50, 30, 0], scale: [1, 1.15, 0.95, 1] }}
           transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
@@ -142,7 +156,6 @@ export default function Home() {
           style={{ background: 'radial-gradient(circle, rgba(83,74,183,0.09) 0%, transparent 70%)' }}
         />
 
-        {/* Subtle dot grid */}
         <div
           className="absolute inset-0 opacity-[0.4]"
           style={{
@@ -159,13 +172,11 @@ export default function Home() {
           animate="show"
           className="relative z-10 max-w-[720px] w-full"
         >
-          {/* Badge */}
           <motion.div variants={fadeUp} className="inline-flex items-center gap-2 bg-[#534AB7]/[0.07] border border-[#534AB7]/20 rounded-full px-5 py-2 mb-9">
             <span className="w-2.5 h-2.5 rounded-full bg-[#534AB7] animate-pulse" />
             <span className="text-[15px] text-[#534AB7] font-medium">Now live at IET Lucknow</span>
           </motion.div>
 
-          {/* Headline */}
           <motion.h1
             variants={fadeUp}
             className="text-[64px] sm:text-[78px] font-bold text-[#1a1a22] leading-[1.04] tracking-[-2.5px] mb-7"
@@ -183,7 +194,6 @@ export default function Home() {
             </span>
           </motion.h1>
 
-          {/* Subtitle */}
           <motion.p
             variants={fadeUp}
             className="text-[20px] text-[#6a6a82] leading-relaxed mb-11 max-w-[560px] mx-auto"
@@ -191,22 +201,38 @@ export default function Home() {
             Raise, track, and resolve hostel issues in one place. Built for students, managed by admins — no more lost complaints.
           </motion.p>
 
-          {/* CTAs */}
           <motion.div variants={fadeUp} className="flex items-center justify-center gap-4 flex-wrap">
             <motion.div whileHover={{ scale: 1.04, y: -1 }} whileTap={{ scale: 0.97 }}>
-              <Link
-                to="/create-complaint"
-                className="inline-flex items-center gap-2 text-[17px] text-white font-medium px-8 py-4 rounded-xl bg-[#534AB7] hover:bg-[#6259c9] transition-colors shadow-lg shadow-purple-200"
-              >
-                Raise a complaint
-                <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
-                  <path d="M3 8h10M9 4l4 4-4 4" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </Link>
+           <motion.div whileHover={{ scale: 1.04, y: -1 }} whileTap={{ scale: 0.97 }}>
+  <Link
+    to={
+      user
+        ? user.role === 'admin'
+          ? '/view-complaints'
+          : '/create-complaint'
+        : '/register'
+    }
+    className="inline-flex items-center gap-2 text-[17px] text-white font-medium px-8 py-4 rounded-xl bg-[#534AB7] hover:bg-[#6259c9] transition-colors shadow-lg shadow-purple-200"
+  >
+    {user
+      ? user.role === 'admin'
+        ? 'Resolve complaints'
+        : 'Raise a complaint'
+      : 'Get started'}
+      
+    <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
+      <path d="M3 8h10M9 4l4 4-4 4" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  </Link>
+</motion.div>
             </motion.div>
             <motion.div whileHover={{ scale: 1.04, y: -1 }} whileTap={{ scale: 0.97 }}>
               <Link
-                to="/complaints"
+                to={
+      user
+        ? '/view-complaints'
+        : '/register'
+    }
                 className="inline-flex items-center gap-2 text-[17px] text-[#5a5a72] font-medium px-8 py-4 rounded-xl border border-black/[0.12] hover:bg-black/[0.03] hover:text-[#1a1a22] transition-colors"
               >
                 View complaints
@@ -214,7 +240,6 @@ export default function Home() {
             </motion.div>
           </motion.div>
 
-          {/* Stats */}
           <motion.div
             variants={fadeUp}
             className="flex items-center justify-center gap-12 mt-16 pt-12 border-t border-black/[0.06]"
@@ -246,7 +271,7 @@ export default function Home() {
           </motion.div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 max-w-[1100px] mx-auto">
-            {features.map((f, i) => (
+            {features.map((f) => (
               <motion.div
                 key={f.title}
                 variants={fadeUp}
@@ -282,40 +307,60 @@ export default function Home() {
         <SectionWrapper>
           <motion.div variants={fadeUp} className="relative max-w-[560px] mx-auto">
             <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-5 py-2 mb-7">
-              <span className="text-[15px] text-white/80 font-medium">Join your hostelmates</span>
+              <span className="text-[15px] text-white/80 font-medium">
+                {user?.role === 'admin' ? 'Admin panel' : 'Join your hostelmates'}
+              </span>
             </div>
             <h2 className="text-[42px] sm:text-[52px] font-bold text-white tracking-tight leading-tight mb-6">
-              Ready to get<br />your issues resolved?
+              {user?.role === 'admin'
+                ? <>Ready to resolve<br />pending complaints?</>
+                : <>Ready to get<br />your issues resolved?</>}
             </h2>
             <p className="text-[18px] text-white/65 mb-11 leading-relaxed">
-              Join hundreds of students already using HostelPulse to get their problems heard and fixed — faster than ever.
+              {user?.role === 'admin'
+                ? 'Review and resolve complaints raised by students. Keep the hostel running smoothly.'
+                : 'Join hundreds of students already using HostelPulse to get their problems heard and fixed — faster than ever.'}
             </p>
             <div className="flex items-center justify-center gap-4 flex-wrap">
-              <motion.div whileHover={{ scale: 1.04, y: -1 }} whileTap={{ scale: 0.97 }}>
-                <Link
-                  to="/register"
-                  className="inline-flex items-center gap-2 text-[17px] text-white font-medium px-9 py-4 rounded-xl bg-[#534AB7] hover:bg-[#6259c9] transition-colors  shadow-purple-200"
-                >
-                  Create your account
-                  <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
-                    <path d="M3 8h10M9 4l4 4-4 4" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </Link>
-              </motion.div>
-              <motion.div whileHover={{ scale: 1.04, y: -1 }} whileTap={{ scale: 0.97 }}>
-                <Link
-                  to="/complaints"
-                  className="text-[17px] text-white/80 font-medium px-9 py-4 rounded-xl border border-white/20 hover:bg-white/10 hover:text-white transition-colors"
-                >
-                  Browse complaints
-                </Link>
-              </motion.div>
+              {user ? (
+                <motion.div whileHover={{ scale: 1.04, y: -1 }} whileTap={{ scale: 0.97 }}>
+                  <Link
+                    to={user.role === 'admin' ? '/resolve-complaints' : '/create-complaint'}
+                    className="inline-flex items-center gap-2 text-[17px] text-white font-medium px-9 py-4 rounded-xl bg-[#534AB7] hover:bg-[#6259c9] transition-colors shadow-purple-200"
+                  >
+                    {user.role === 'admin' ? 'Resolve complaints' : 'Raise a complaint'}
+                    <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
+                      <path d="M3 8h10M9 4l4 4-4 4" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </Link>
+                </motion.div>
+              ) : (
+                <>
+                  <motion.div whileHover={{ scale: 1.04, y: -1 }} whileTap={{ scale: 0.97 }}>
+                    <Link
+                      to="/register"
+                      className="inline-flex items-center gap-2 text-[17px] text-white font-medium px-9 py-4 rounded-xl bg-[#534AB7] hover:bg-[#6259c9] transition-colors shadow-purple-200"
+                    >
+                      Create your account
+                      <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
+                        <path d="M3 8h10M9 4l4 4-4 4" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </Link>
+                  </motion.div>
+                  <motion.div whileHover={{ scale: 1.04, y: -1 }} whileTap={{ scale: 0.97 }}>
+                    <Link
+                      to="/view-complaints"
+                      className="text-[17px] text-white/80 font-medium px-9 py-4 rounded-xl border border-white/20 hover:bg-white/10 hover:text-white transition-colors"
+                    >
+                      Browse complaints
+                    </Link>
+                  </motion.div>
+                </>
+              )}
             </div>
           </motion.div>
         </SectionWrapper>
       </section>
-
-     
 
     </div>
   )
