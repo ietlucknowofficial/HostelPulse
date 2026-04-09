@@ -138,7 +138,7 @@ export default function CreateComplaint() {
       })
 
       setSuccess(true)
-      setTimeout(() => navigate('/complaints'), 3000)
+      setTimeout(() => navigate('/view-complaints'), 3000)
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to submit complaint. Please try again.')
     } finally {
