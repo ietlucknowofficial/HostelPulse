@@ -9,6 +9,7 @@ import CreateComplaint from './pages/CreateComplaint'
 import ViewComplaints from './pages/ViewComplaints'
 import ProtectedRoute from './components/ProtectedRoute'
 import StudentRoute from './components/StudentRoute'
+import Dashboard from './pages/Dashboard'
 
 
 
@@ -27,6 +28,7 @@ export default function App() {
          <Route path='/complete-profile' element={<CompleteProfile/>}/>
          <Route path='/create-complaint' element={<ProtectedRoute><StudentRoute><CreateComplaint/></StudentRoute></ProtectedRoute>}/>
          <Route path='/view-complaints'  element={<ProtectedRoute><ViewComplaints/></ProtectedRoute>}/>
+         <Route path='/dashboard' element={<ProtectedRoute><Dashboard/></ProtectedRoute>}/>
         
           </Route>
         

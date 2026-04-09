@@ -88,3 +88,14 @@ const emailRoll = match[0];
 
 
 }
+export const getStudentProfile = async (req, res) => {
+  try {
+    const profile = await studentProfile
+      .findOne({ userId: req.user._id })
+      .populate('hostelId', 'name')
+    if (!profile) return res.status(404).json({ success: false, message: 'Profile not found' })
+    return res.status(200).json({ success: true, profile })
+  } catch (error) {
+    return res.status(500).json({ success: false, message: 'Server error', error: error.message })
+  }
+}
