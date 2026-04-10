@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const API = axios.create({
-  baseURL: 'http://52.23.192.172:5000/api',
+  baseURL: 'https://d1fwtw1io6mluw.cloudfront.net/api',
 })
 
 

@@ -46,10 +46,10 @@ export default function Login() {
       })
       localStorage.setItem('token', data.token)
       localStorage.setItem('user',  JSON.stringify(data.user))
-      if (data.user.status !== "active") {
+      if (data.user.status !== "Active") {
   navigate('/complete-profile');
 } else {
-  navigate('/');
+  navigate('/dashboard');
 }
      
     } catch (err) {
