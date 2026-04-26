@@ -81,15 +81,9 @@ This system improves communication and accountability between students and hoste
  
 The project is already deployed and accessible here:
  
-👉 **[Live Link](https://your-deployed-link.com)**
+👉 https://d1fwtw1io6mluw.cloudfront.net
  
-> Use the demo credentials below to explore the platform without registering:
->
-> **Student Login** — `student@demo.com` / `demo123`
-> **Admin Login** — `admin@demo.com` / `admin123`
- 
----
- 
+
 ### 💻 Run Locally
  
 Follow these steps to set up and run the project on your local machine.
@@ -101,8 +95,8 @@ Follow these steps to set up and run the project on your local machine.
 #### 1. Clone the Repository
  
 ```bash
-git clone https://github.com/your-username/hostelpulse.git
-cd hostelpulse
+git clone https://github.com/ietlucknowofficial/HostelPulse
+cd hostelPulse
 ```
  
 #### 2. Setup the Backend
