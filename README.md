@@ -61,6 +61,10 @@ This system improves communication and accountability between students and hoste
 - Git
 - GitHub
 
+### Deployment
+- AWS EC2 for backend
+- AWS S3 for frontend
+
 
 ---
 
@@ -168,6 +172,8 @@ Visit: `http://localhost:3000`
 - Himanshu (2400520100040)
 - Devraj Gupta (2400520100034)
 - Ansh Sharma - 2400520100016
+- Bhavya Nigam (2400520100028)
+  
 
 
 
